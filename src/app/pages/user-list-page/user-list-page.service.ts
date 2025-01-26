@@ -8,11 +8,11 @@ import { User } from '../../models/user.interface';
 })
 
 export class UserListPageService {
-  private API_URL = '';
+  private API_URL = 'http://localhost:3333';
 
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.API_URL);
+    return this.http.post<User[]>(`${this.API_URL}/users`, {});
   }
 }
