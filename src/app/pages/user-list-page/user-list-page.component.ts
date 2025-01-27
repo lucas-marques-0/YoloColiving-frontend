@@ -31,7 +31,8 @@ export class UserListPageComponent implements OnInit {
   }
 
   getUsers() {
-    // ATENÇÃO (Opcional): Mudar para função 'addApiUsersToAws()' caso queira importando base de dados inicial da API pra AWS (não atualizar a página para não executar denovo).
+    // ATENÇÃO (Opcional): Mudar para a função 'addApiUsersToAws()' caso queira importar a base de dados inicial da API pro AWS (não atualizar a página para não executar denovo).
+
     this.userListPageService.getUsers().subscribe({
       next: (response) => {
         this.users = response;
