@@ -1,11 +1,12 @@
 .navbar {
-    background-color: #ffc1e4;
+    background-color: #F4CBDB;
     color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .navbar h1 span {
@@ -213,7 +214,6 @@
     .user-card .actions {
         gap: 30px;
     }
-    
 }
 
 @media (max-width: 550px) {

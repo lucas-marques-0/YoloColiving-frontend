@@ -7,7 +7,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import Swal from 'sweetalert2';
 
-
 @Component({
     selector: 'app-user-list-page',
     standalone: true,
@@ -18,13 +17,12 @@ import Swal from 'sweetalert2';
 export class UserListPageComponent implements OnInit {
   users: User[] = [];
 
-  isModalVisible = false;
-  isEditing = false;  
-  editUserId: string = '';
-  currentUser: User = { id: '', Nome: '', Telefone: '', Email: '', Tipo: '', DataDeCadastro: '' }; 
-  
   filteredUsers: User[] = [];
   selectedFilter: string = '';
+
+  isModalVisible = false;
+  isEditing = false;  
+  currentUser: User = { id: '', Nome: '', Telefone: '', Email: '', Tipo: '', DataDeCadastro: '' }; 
 
   constructor(private userListPageService: UserListPageService) {}
 
@@ -33,17 +31,30 @@ export class UserListPageComponent implements OnInit {
   }
 
   getUsers() {
-    this.userListPageService.getUsers().subscribe((data) => {
-      this.users = data;
-      this.filteredUsers = [...this.users];
+    // ATENÇÃO (Opcional): Mudar para função 'addApiUsersToAws()' caso queira importando base de dados inicial da API pra AWS (não atualizar a página para não executar denovo).
+    this.userListPageService.getUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        this.filteredUsers = [...this.users];
+      },
+      error: (erro) => {
+        Swal.fire('Erro!', erro.message, 'error'); 
+      }
     });
   }
 
   addUser() {
+    if (!this.validateFields()) return; 
     this.currentUser.DataDeCadastro = this.getCurrentDate()
-    this.userListPageService.addUser(this.currentUser).subscribe((data) => {
-      this.getUsers()
-      this.closeModal()
+    this.userListPageService.addUser(this.currentUser).subscribe({
+      next: (response) => {
+        this.getUsers();
+        this.closeModal();
+        Swal.fire('Sucesso!', response.message, 'success');
+      },
+      error: (erro) => {
+        Swal.fire('Erro!', erro.message, 'error'); 
+      }
     });
   }
 
@@ -62,9 +73,7 @@ export class UserListPageComponent implements OnInit {
             this.getUsers()
           },
           error: (erro) => {
-            console.log(erro)
-            const errorMsg = erro.error?.message || 'Erro ao excluir o usuário.';
-            Swal.fire('Erro!', errorMsg, 'error');
+            Swal.fire('Erro!', erro.message, 'error');
           },
         });
       }
@@ -72,9 +81,16 @@ export class UserListPageComponent implements OnInit {
   }
 
   editUser() {
-    this.userListPageService.editUser(this.currentUser).subscribe(() => {
-      this.getUsers();
-      this.closeModal();
+    if (!this.validateFields()) return; 
+    this.userListPageService.editUser(this.currentUser).subscribe({
+      next: (response) => {
+        this.getUsers();
+        this.closeModal();
+        Swal.fire('Sucesso!', response.message, 'success');
+      },
+      error: (erro) => {
+        Swal.fire('Erro!', erro.message, 'error');
+      },
     });
   }
 
@@ -111,4 +127,39 @@ export class UserListPageComponent implements OnInit {
     const day = String(today.getDate()).padStart(2, '0'); 
     return `${year}-${month}-${day}`;
   };
+
+  validateFields(): boolean {
+    const { Nome, Telefone, Email, Tipo } = this.currentUser;
+    if (!Nome || !Telefone || !Email || !Tipo) {
+      Swal.fire({
+        title: 'Atenção!',
+        text: 'Por favor, preencha todos os campos obrigatórios.',
+        icon: 'warning',
+      });
+      return false;
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(Email)) {
+      Swal.fire({
+        title: 'Atenção!',
+        text: 'Por favor, insira um email válido.',
+        icon: 'warning',
+      });
+      return false;
+    }
+  
+    const telefoneRegex = /^\+?\d{0,3}[\s-]?\(?\d{0,2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/;
+    if (!telefoneRegex.test(Telefone)) {
+      Swal.fire({
+        title: 'Atenção!',
+        text: 'Por favor, insira um número de telefone válido.',
+        icon: 'warning',
+      });
+      return false;
+    }
+  
+    return true; 
+  }
+  
 }
