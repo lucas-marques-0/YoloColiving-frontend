@@ -1,4 +1,4 @@
-# Projeto Front-end (Yolo Coliving)
+# Projeto Front-end [Angular] (Yolo Coliving)
 
 ![image](https://github.com/user-attachments/assets/6724eb37-83a1-4510-b90b-7ef1f1c1ffe3)
 
