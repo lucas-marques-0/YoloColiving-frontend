@@ -1,1 +1,63 @@
-<p>user-list-page works!</p>
+<nav class="navbar">
+    <h1>Yolo<span>Coliving</span></h1>
+</nav>
+
+<div class="content">
+    <div class="container">
+        <div class="top-options">
+            <select>
+                <option value="">Selecione um filtro</option>
+                <option value="hospede">Hóspede</option>
+                <option value="proprietario">Proprietário</option>
+            </select>
+            <button (click)="openModal()"><mat-icon fontIcon="add" class="icon" />Adicionar</button>
+        </div>
+        <div class="users-list">
+            @for (user of users; track $index) {
+            <div class="user-card">
+                <div class="infos">
+                    <mat-icon class="avatar" fontIcon="person" />
+                    <div class="details">
+                        <h3>{{ user.Nome }}</h3>
+                        <p>{{ user.Tipo }}</p>
+                        <p>{{ user.Telefone }}</p>
+                        <p>{{ user.Email }}</p>
+                        <p>{{ user.DataDeCadastro }}</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <mat-icon class="icon-grey" (click)="openModal(user)" fontIcon="edit" />
+                    <mat-icon class="icon-grey" (click)="deleteUser(user.id)" fontIcon="delete" />
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+@if (isModalVisible) {
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>{{ isEditing ? 'Editar Usuário' : 'Adicionar Usuário' }}</h2>
+            <mat-icon class="icon" (click)="closeModal()" fontIcon="close" />
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="isEditing ? editUser() : addUser()">
+                <input [(ngModel)]="currentUser.Nome" name="name" placeholder="Nome" required />
+                <input [(ngModel)]="currentUser.Telefone" name="telefone" placeholder="Telefone" required />
+                <input [(ngModel)]="currentUser.Email" name="email" placeholder="Email" required />
+                <select [(ngModel)]="currentUser.Tipo" name="tipo" required>
+                    <option value="">Selecione um tipo</option>
+                    <option value="Hóspede">Hóspede</option>
+                    <option value="Proprietário">Proprietário</option>
+                    <option value="Operador">Operador</option>
+                    <option value="Fornecedor">Fornecedor</option>
+                </select>
+                <button type="submit">{{ isEditing ? 'Confirmar Edição' : 'Confirmar Adição' }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+}

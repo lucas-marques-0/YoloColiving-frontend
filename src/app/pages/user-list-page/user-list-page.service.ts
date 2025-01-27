@@ -12,7 +12,23 @@ export class UserListPageService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
+  addApiUsersToAws(): Observable<User[]> {
     return this.http.post<User[]>(`${this.API_URL}/users`, {});
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.API_URL}/users`);
+  }
+
+  addUser(user: User): Observable<User[]> {
+    return this.http.post<User[]>(`${this.API_URL}/users`, user);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.API_URL}/users/${userId}`);
+  }
+
+  editUser(user: User): Observable<any> {
+    return this.http.put<any>(`${this.API_URL}/users/${user.id}`, user);
   }
 }

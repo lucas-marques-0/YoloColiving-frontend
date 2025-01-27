@@ -1,8 +1,8 @@
 export interface User {
-    id: string;
-    name: string;
-    email: string;
-    type: string;
-    phone: string;
-    registrationDate: string;
+    id: string;               
+    Nome: string;             
+    Telefone: string;         
+    Email: string;           
+    Tipo: string;             
+    DataDeCadastro: string;   
 }
