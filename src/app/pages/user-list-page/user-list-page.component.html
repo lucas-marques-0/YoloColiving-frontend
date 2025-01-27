@@ -5,15 +5,18 @@
 <div class="content">
     <div class="container">
         <div class="top-options">
-            <select>
-                <option value="">Selecione um filtro</option>
-                <option value="hospede">Hóspede</option>
-                <option value="proprietario">Proprietário</option>
+            <select [(ngModel)]="selectedFilter" (change)="filterUsers()">
+                <option value="">Selecione um tipo</option>
+                <option value="Hóspede">Hóspede</option>
+                <option value="Proprietário">Proprietário</option>
+                <option value="Operador">Operador</option>
+                <option value="Fornecedor">Fornecedor</option>
             </select>
+            <button (click)="clearFilter()"><mat-icon fontIcon="refresh" class="icon" />Limpar Filtro</button>
             <button (click)="openModal()"><mat-icon fontIcon="add" class="icon" />Adicionar</button>
         </div>
         <div class="users-list">
-            @for (user of users; track $index) {
+            @for (user of filteredUsers; track $index) {
             <div class="user-card">
                 <div class="infos">
                     <mat-icon class="avatar" fontIcon="person" />

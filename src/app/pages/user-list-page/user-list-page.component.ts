@@ -21,7 +21,10 @@ export class UserListPageComponent implements OnInit {
   isModalVisible = false;
   isEditing = false;  
   editUserId: string = '';
-  currentUser: User = { id: '', Nome: '', Telefone: '', Email: '', Tipo: '', DataDeCadastro: '' };  
+  currentUser: User = { id: '', Nome: '', Telefone: '', Email: '', Tipo: '', DataDeCadastro: '' }; 
+  
+  filteredUsers: User[] = [];
+  selectedFilter: string = '';
 
   constructor(private userListPageService: UserListPageService) {}
 
@@ -32,6 +35,7 @@ export class UserListPageComponent implements OnInit {
   getUsers() {
     this.userListPageService.getUsers().subscribe((data) => {
       this.users = data;
+      this.filteredUsers = [...this.users];
     });
   }
 
@@ -72,6 +76,16 @@ export class UserListPageComponent implements OnInit {
       this.getUsers();
       this.closeModal();
     });
+  }
+
+  filterUsers() {
+    if (!this.selectedFilter) this.filteredUsers = [...this.users]; 
+    else this.filteredUsers = this.users.filter((user) => user.Tipo === this.selectedFilter);
+  }
+
+  clearFilter() {
+    this.selectedFilter = '';
+    this.filteredUsers = [...this.users]; 
   }
 
   openModal(user: any = null) {
