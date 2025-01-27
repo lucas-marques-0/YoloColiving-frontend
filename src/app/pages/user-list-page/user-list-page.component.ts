@@ -162,5 +162,4 @@ export class UserListPageComponent implements OnInit {
   
     return true; 
   }
-  
 }
