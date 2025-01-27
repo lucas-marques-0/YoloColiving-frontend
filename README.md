@@ -1,5 +1,7 @@
 # Projeto Front-end (Yolo Coliving)
 
+![image](https://github.com/user-attachments/assets/6724eb37-83a1-4510-b90b-7ef1f1c1ffe3)
+
 ## Para rodar o projeto siga os passos:
 
 1 - Execute  `npm install` noi terminal para instalar as dependências nescessárias.
